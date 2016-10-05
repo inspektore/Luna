@@ -52,7 +52,7 @@ if (!defined('FORUM'))
 						}
 						?>
 						<input type="hidden" name="box" value="0" />
-						<table class="table table-striped table-hover">
+						<table class="table table-striped table-responsive table-hover">
 							<thead>
 								<tr>
 									<th style="width: 18px;"><input type="checkbox" id="checkAllButon" value="1" onclick="checkAll('selected_messages[]','checkAllButon');" /></th>
