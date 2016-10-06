@@ -10,7 +10,7 @@
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300);
 
 body {
-	font-family: "Segoe UI", "Open Sans", Helvetica, Arial, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif !important;
 	background-color: #136cab;
 	color: #fff;
 	text-align: center;
@@ -18,7 +18,6 @@ body {
 }
 
 h1 {
-	font-family: "Segoe UI Light", "Open Sans", Helvetica, Arial, sans-serif;
 	font-weight: 100;
 }
 
