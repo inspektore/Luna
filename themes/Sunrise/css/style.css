@@ -48,3 +48,29 @@
 .list-group-thread.subforum-list + .btn-pagination {
     margin-top: 1px;
 }
+
+.col-user-info {
+    padding: 5px 5px 5px 22px;
+}
+
+.col-user-info h4 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.col-user-info h5 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.col-user-info h5.time-stamp {
+    margin: 10px 0 0 0;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.col-user-info h5.comment-stamp {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+}
