@@ -642,9 +642,13 @@ function do_bbcode($text, $is_signature = false) {
 	}
     
     if ($luna_config['o_allow_spoiler'] == 1 && strpos($text, '[spoiler') !== false) {
-        $text = str_replace('[spoiler]', "</p><div class=\"panel panel-default panel-spoiler\" style=\"padding: 0px;\"><div class=\"panel-heading\" onclick=\"var e,d,c=this.parentNode,a=c.getElementsByTagName('div')[1],b=this.getElementsByTagName('.fa')[0];if(a.style.display!=''){while(c.parentNode&&(!d||!e||d==e)){e=d;d=(window.getComputedStyle?getComputedStyle(c, null):c.currentStyle)['backgroundColor'];if(d=='transparent'||d=='rgba(0, 0, 0, 0)')d=e;c=c.parentNode;}a.style.display='';a.style.backgroundColor=d;b.innerHTML='&#9650;';}else{a.style.display='none';b.innerHTML='&#9660;';}\" style=\"font-weight: bold; cursor: pointer; font-size: 0.9em;\"><h3 class=\"panel-title\"><i class=\"fa fa-fw fa-angle-down\"></i>".__('Spoiler', 'luna')."</h3></div><div class=\"panel-body\" style=\"display: none;\"><p>", $text);
-        $text = preg_replace('#\[spoiler=(.*?)\]#s', '</p><div class="panel panel-default panel-spoiler" style="padding: 0px;"><div class="panel-heading" onclick="var e,d,c=this.parentNode,a=c.getElementsByTagName(\'div\')[1],b=this.getElementsByTagName(\'span\')[0];if(a.style.display!=\'\'){while(c.parentNode&&(!d||!e||d==e)){e=d;d=(window.getComputedStyle?getComputedStyle(c, null):c.currentStyle)[\'backgroundColor\'];if(d==\'transparent\'||d==\'rgba(0, 0, 0, 0)\')d=e;c=c.parentNode;}a.style.display=\'\';a.style.backgroundColor=d;b.innerHTML=\'&#9650;\';}else{a.style.display=\'none\';b.innerHTML=\'&#9660;\';}" style="font-weight: bold; cursor: pointer; font-size: 0.9em;"><h3 class="panel-title"><i class="fa fa-fw fa-angle-down"></i>$1</h3></div><div class="panel-body" style="display: none;"><p>', $text);
-        $text = str_replace('[/spoiler]', '</p></div></div><p>', $text);
+        $count = 0;
+        $spoiler = mt_rand();
+        
+        $text = preg_replace('%\[spoiler\]\s*%', '</p><div class="panel panel-default panel-spoiler"><div class="panel-heading" role="tab" id="heading'.$spoiler.$count.'"><h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'.$spoiler.$count.'" aria-expanded="true" aria-controls="collapse'.$spoiler.$count.'"><span class="fa fa-fw fa-angle-down"></span> '.__('Spoiler', 'luna').'</a></h4></div><div id="collapse'.$spoiler.$count.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$spoiler.$count.'"><div class="panel-body"><p>', $text, -1, $count);
+        $text = preg_replace('%\[spoiler=(.*?)\]\s*%', '</p><div class="panel panel-default panel-spoiler"><div class="panel-heading" role="tab" id="heading'.$spoiler.$count.'"><h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'.$spoiler.$count.'" aria-expanded="true" aria-controls="collapse'.$spoiler.$count.'"><span class="fa fa-fw fa-angle-down"></span> $1</a></h4></div><div id="collapse'.$spoiler.$count.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'.$spoiler.$count.'"><div class="panel-body"><p>', $text, -1, $count);
+        
+        $text = str_replace('[/spoiler]', '</p></div></div></div><p>', $text);
     }
     
 	if (!$is_signature) {
@@ -742,60 +746,30 @@ function do_clickable($text) {
 function get_smilies() {
 	global $luna_config;
 
-	// Here you can add additional smilies if you like (please note that you must escape single quote and backslash)
-	if ($luna_config['o_emoji'] == 1) {
-		$smilies = array(
-			':)' => '&#x1f601;',
-			':|' => '&#x1f611;',
-			':(' => '&#x1f629;',
-			':d' => '&#x1f604;',
-			':D' => '&#x1f604;',
-			':o' => '&#x1f62f;',
-			':O' => '&#x1f62f;',
-			';)' => '&#x1f609;',
-			':/' => '&#x1f612;',
-			':P' => '&#x1f60b;',
-			':p' => '&#x1f60b;',
-			':lol:' => '&#x1f601;',
-			':-))' => '&#x1f601;',
-			':@' => '&#x1f620;',
-			'%)' => '&#x1f606;',
-			'b:' => '&#x1f60e;',
-			'B:' => '&#x1f60e;',
-			':hc:' => '&#x1f605;',
-			'(A)' => '&#x1f607;',
-			'(a)' => '&#x1f607;',
-			'^-^' => '&#x1f60f;',
-			'^.^' => '&#x1f60f;'
-		);
-	} else {
-		$smilies = array(
-			':)' => 'smile.png',
-			':|' => 'neutral.png',
-			':(' => 'sad.png',
-			':d' => 'big_smile.png',
-			':D' => 'big_smile.png',
-			':o' => 'yikes.png',
-			':O' => 'yikes.png',
-			';)' => 'wink.png',
-			':/' => 'hmm.png',
-			':P' => 'tongue.png',
-			':p' => 'tongue.png',
-			':lol:' => 'happy.png',
-			':-))' => 'happy.png',
-			':@' => 'angry.png',
-			'%)' => 'roll.png',
-			'b:' => 'cool.png',
-			'B:' => 'cool.png',
-			':hc:' => 'happycry.png',
-			'(A)' => 'angel.png',
-			'^-^' => 'ohyeah.png',
-			'(a)' => 'angel.png',
-			'(A)' => 'angel.png',
-			'^-^' => 'happy.png',
-			'^.^' => 'happy.png'
-		);
-	}
+    $smilies = array(
+        ':)' => '&#x1f601;',
+        ':|' => '&#x1f611;',
+        ':(' => '&#x1f629;',
+        ':d' => '&#x1f604;',
+        ':D' => '&#x1f604;',
+        ':o' => '&#x1f62f;',
+        ':O' => '&#x1f62f;',
+        ';)' => '&#x1f609;',
+        ':/' => '&#x1f612;',
+        ':P' => '&#x1f60b;',
+        ':p' => '&#x1f60b;',
+        ':lol:' => '&#x1f601;',
+        ':-))' => '&#x1f601;',
+        ':@' => '&#x1f620;',
+        '%)' => '&#x1f606;',
+        'b:' => '&#x1f60e;',
+        'B:' => '&#x1f60e;',
+        ':hc:' => '&#x1f605;',
+        '(A)' => '&#x1f607;',
+        '(a)' => '&#x1f607;',
+        '^-^' => '&#x1f60f;',
+        '^.^' => '&#x1f60f;'
+    );
 
 	return $smilies;
 }
@@ -813,10 +787,7 @@ function do_smilies($text) {
 
 	foreach ($smilies as $smiley_text => $smiley_img) {
 		if (strpos($text, $smiley_text) !== false)
-			if ($luna_config['o_emoji'] == 1)
-				$text = ucp_preg_replace('%(?<=[>\s])'.preg_quote($smiley_text, '%').'(?=[^\p{L}\p{N}])%um', '<span class="emoji">'.$smiley_img.'</span>', $text);
-			else
-				$text = ucp_preg_replace('%(?<=[>\s])'.preg_quote($smiley_text, '%').'(?=[^\p{L}\p{N}])%um', '<img src="'.luna_htmlspecialchars(get_base_url(true).'/img/smilies/'.$smiley_img).'" width="'.$luna_config['o_emoji_size'].'" height="'.$luna_config['o_emoji_size'].'" alt="'.substr($smiley_img, 0, strrpos($smiley_img, '.')).'" />', $text);
+			$text = ucp_preg_replace('%(?<=[>\s])'.preg_quote($smiley_text, '%').'(?=[^\p{L}\p{N}])%um', '<span class="emoji">'.$smiley_img.'</span>', $text);
 	}
 
 	return substr($text, 1, -1);
